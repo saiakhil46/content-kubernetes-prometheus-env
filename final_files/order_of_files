@@ -1,0 +1,24 @@
+1. cluster-related-files
+--> namespaces.yml
+--> clusterRole.yml
+
+2. prometheus-files
+--> prometheus-config-map.yml
+--> prometheus-rules-config-map.yml
+--> prometheus-pvc.yml
+--> prometheus-deployment.yml
+--> prometheus-service.yml
+--> kube-state-metrics.yml
+
+3. grafana-files
+--> grafana-datasource-config.yml
+--> grafana-pvc.yml
+--> grafana-deployment.yml
+--> grafana-service.yml
+--> Dashboard
+
+4. alertmanager
+--> alertmanager-configmap.yml
+--> alertmanager-deployment.yml
+--> alertmanager-service.yml
+

@@ -37,6 +37,10 @@ spec:
           - mountPath: /etc/grafana/provisioning/datasources
             name: grafana-datasources
             readOnly: false
+            # - mountPath: /etc/grafana/grafana.ini
+            #name: grafana-ini
+            
+  
       volumes:
         - name: grafana-storage-volume
           persistentVolumeClaim:
@@ -45,3 +49,8 @@ spec:
           configMap:
               defaultMode: 420
               name: grafana-datasources
+      #- name: grafana-ini
+      #configMap:
+      #defaultMode: 420
+      #name: grafana-ini
+      
