@@ -10,6 +10,10 @@ spec:
       labels:
         app: prometheus-server
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
       containers:
         - name: prometheus
           image: prom/prometheus:v2.2.1
@@ -37,5 +41,6 @@ spec:
             defaultMode: 420
             name: prometheus-server-conf
 
-        - name: prometheus-storage-volume
-          emptyDir: {}
+        - name: prometheus-storage-volume   
+          persistentVolumeClaim:
+            claimName: prometheus-storage-volume
