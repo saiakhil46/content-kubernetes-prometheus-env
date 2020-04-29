@@ -10,6 +10,8 @@ data:
     global:
       smtp_smarthost: 'localhost:25'
       smtp_from: 'alertmanager@gmail.com.org'
+      smtp_auth_username: 'kfinalert@gmail.com'
+      smtp_auth_password: 'Kf!nal3rt@321'
       smtp_require_tls: false
     route:
       receiver: slack_receiver

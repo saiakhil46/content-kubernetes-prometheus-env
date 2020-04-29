@@ -21,6 +21,12 @@ spec:
       containers:
       - name: grafana
         image: grafana/grafana:latest
+        env:
+        - name: GF_SERVER_DOMAIN
+          value: "uattools.uat1.kalfin.in"
+        - name: GF_SERVER_ROOT_URL
+          value: "%(protocol)s://%(domain)s:/grafana"
+
         ports:
         - name: grafana
           containerPort: 3000
