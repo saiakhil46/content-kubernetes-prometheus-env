@@ -1,6 +1,7 @@
 1. cluster-related-files
 --> namespaces.yml
 --> clusterRole.yml
+--> sc.yml
 
 2. prometheus-files
 --> prometheus-config-map.yml
@@ -22,3 +23,5 @@
 --> alertmanager-deployment.yml
 --> alertmanager-service.yml
 
+5. node-exporter
+---> node-exporter.yml
