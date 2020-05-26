@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: promteams-service
+  namespace: monitoring
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port:   '2000'
+
+spec:
+  selector:
+    app: promteams
+  type: ClusterIP
+  ports:
+    - port: 2000
+      targetPort: 2000
+      protocol: TCP
+

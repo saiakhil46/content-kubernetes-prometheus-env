@@ -14,11 +14,18 @@ data:
       smtp_auth_password: 'Kf!nal3rt@321'
       smtp_require_tls: false
     route:
-      receiver: slack_receiver
+      group_by: ['alertname']
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 1h
+      receiver: team-1
+
     receivers:
-    - name: slack_receiver
-      slack_configs:
-      - send_resolved: true
-        username: '<SLACK_USER>'
-        api_url: '<APP_URL>'
-        channel: '#<CHANNEL>'
+    - name: team-1
+      email_configs:
+      - to: 'saiakhil.g@optit.co'
+      - to: 'prabhakaran@kaleidofin.com'
+      webhook_configs:
+      - url: 'http://promteams-service.monitoring.svc.cluster.local:2000/alert_channel'
+        send_resolved: true
+

@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promteams-config
+  labels:
+    name: promteams-config
+  namespace: monitoring
+data:
+  card.tmpl: "{{ define \"teams.card\" }}\n{\n  \"@type\": \"MessageCard\",\n  \"@context\":
+    \"http://schema.org/extensions\",\n  \"themeColor\": \"{{- if eq .Status \"resolved\"
+    -}}2DC72D\n                 {{- else if eq .Status \"firing\" -}}\n                    {{-
+    if eq .CommonLabels.severity \"critical\" -}}8C1A1A\n                    {{- else
+    if eq .CommonLabels.severity \"warning\" -}}FFA500\n                    {{- else
+    -}}808080{{- end -}}\n                 {{- else -}}808080{{- end -}}\",\n  \"summary\":
+    \"Prometheus Alerts\",\n  \"title\": \"Prometheus Alert ({{ .Status }})\",\n  \"sections\":
+    [ {{$externalUrl := .ExternalURL}}\n  {{- range $index, $alert := .Alerts }}{{-
+    if $index }},{{- end }}\n    { \n      \"facts\": [\n        {{- range $key, $value
+    := $alert.Annotations }}\n        {\n          \"name\": \"{{ reReplaceAll \"_\"
+    \"\\\\\\\\_\" $key }}\",\n          \"value\": \"{{ reReplaceAll \"_\" \"\\\\\\\\_\"
+    $value }}\"\n        },\n        {{- end -}}\n        {{$c := counter}}{{ range
+    $key, $value := $alert.Labels }}{{if call $c}},{{ end }}\n        {\n          \"name\":
+    \"{{ reReplaceAll \"_\" \"\\\\\\\\_\" $key }}\",\n          \"value\": \"{{ reReplaceAll
+    \"_\" \"\\\\\\\\_\" $value }}\"\n        }\n        {{- end }}\n      ],\n      \"markdown\":
+    true\n    }\n    {{- end }}\n  ]\n}\n{{ end }}\n\n"
+  config.yml: |+
+    connectors:
+      - alert_channel: "https://outlook.office.com/webhook/97a0cea8-36f6-4f42-98ea-999f71257811@47a3cde3-9279-4405-a9e4-d2676959207e/IncomingWebhook/19961c0514f74a7bbdcc714919f07565/4d53b342-d8c2-47f7-9db3-5e18198935bf"
+

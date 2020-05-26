@@ -1,0 +1,17 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: demo-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: custom-aws-sc
+  capacity:
+    storage: 7Gi
+  accessModes:
+    - ReadWriteOnce
+
+
+
+
+    

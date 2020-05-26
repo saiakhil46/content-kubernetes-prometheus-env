@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promteams-deployment
+  labels:
+    app: promteams
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: promteams
+  template:
+    metadata:
+      name: promteams
+      labels:
+        app: promteams
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000      
+      containers:
+      - name: promteams
+        image: bzon/prometheus-msteams:v1.1.4
+        env:
+        - name: CONFIG_FILE
+          value: "/etc/promteams/config.yml"        
+        - name: TEMPLATE_FILE
+          value: "/etc/promteams/card.tmpl" 
+        ports:  
+        - containerPort: 2000
+        imagePullPolicy: Always  #The default pull policy is IfNotPresent which causes the Kubelet to skip pulling an image if it already exists.
+        volumeMounts:
+        - name: promteams-config
+          mountPath: /etc/promteams/            
+      restartPolicy: Always  #always restart pod when it got crashed 
+      volumes:
+        - name: promteams-config
+          configMap:
+            name: promteams-config
+      

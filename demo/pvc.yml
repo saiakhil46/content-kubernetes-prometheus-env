@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: my-disk-claim-1
+spec:
+  resources:
+    requests:
+      storage: 9Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: custom-aws-sc
