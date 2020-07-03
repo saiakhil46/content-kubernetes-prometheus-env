@@ -8,8 +8,8 @@ metadata:
 data:
   prometheus.yml: |-
     global:
-      scrape_interval: 5s
-      evaluation_interval: 5s
+      scrape_interval: 10s
+      evaluation_interval: 10s
 
     alerting:
       alertmanagers:
@@ -28,11 +28,55 @@ data:
 
     rule_files:
       - "/var/prometheus/rules/*_alerts.yml"
+      - "/opt/prometheus/rules_1/rules.yml"
+      - "/opt/prometheus/rules_1/alerts.yml"  
 
     scrape_configs:
-      - job_name: 'node-exporter'
+
+      - job_name: kubernetes-node-exporter
+        honor_timestamps: true
+        metrics_path: /metrics
+        scheme: http
+        kubernetes_sd_configs:
+        - role: pod
+        relabel_configs:
+        - separator: ;
+          regex: __meta_kubernetes_pod_label_(.+)
+          replacement: $1
+          action: labelmap
+        - source_labels: [__address__]
+          separator: ;
+          regex: ([^:]+)(?::\d+)?
+          target_label: __address__
+          replacement: $1:9100
+          action: replace
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_pod_label_k8s_app]
+          separator: ;
+          regex: monitoring;node-exporter
+          replacement: $1
+          action: keep
+        - source_labels: [__meta_kubernetes_namespace]
+          separator: ;
+          regex: (.*)
+          target_label: namespace
+          replacement: $1
+          action: replace
+        - source_labels: [__meta_kubernetes_pod_name]
+          separator: ;
+          regex: (.*)
+          target_label: pod
+          replacement: $1
+          action: replace
+        - source_labels: [__meta_kubernetes_pod_node_name]
+          separator: ;
+          regex: (.*)
+          target_label: instance
+          replacement: $1
+          action: replace
+
+      - job_name: 'kube-state-metrics'
         static_configs:
-        - targets: ['192.168.78.48:9100', '192.168.134.60:9100']
+        - targets: ['kube-state-metrics.monitoring.svc.cluster.local:8080']
 
       - job_name: 'kubernetes-apiservers'
 
@@ -149,3 +193,5 @@ data:
         - source_labels: [__meta_kubernetes_service_name]
           action: replace
           target_label: kubernetes_name
+
+

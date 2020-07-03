@@ -21,15 +21,67 @@ spec:
       containers:
       - name: grafana
         image: grafana/grafana:6.6.0
+        env:
+        - name: GF_SECURITY_ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: grafana-cred
+              key: admin-user
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: grafana-cred
+              key: admin-password
         ports:
         - name: grafana
           containerPort: 3000
         volumeMounts:
-          - mountPath: /var/lib/grafana
+          - mountPath: "/var/lib/grafana"
             name: grafana-storage-volume
-          - mountPath: /etc/grafana/provisioning/datasources
+          - mountPath: "/etc/grafana/provisioning/datasources/"
             name: grafana-datasources
             readOnly: false
+          - mountPath: "/etc/grafana/"
+            name: grafana-config
+          - mountPath: "/etc/grafana/provisioning/dashboards/"
+            name: grafana-dashboardproviders
+          - name: apiserver
+            mountPath: "/var/lib/grafana/dashboards/apiserver.json"
+          - name: cluster-total
+            mountPath: "/var/lib/grafana/dashboards/cluster-total.json"
+          - name: controller-manager
+            mountPath: "/var/lib/grafana/dashboards/controller-manager.json"           
+          - name: k8s-resources-cluster
+            mountPath: "/var/lib/grafana/dashboards/k8s-resources-cluster.json"
+          - name: k8s-resources-namespace
+            mountPath: "/var/lib/grafana/dashboards/k8s-resources-namespace.json"
+          - name: k8s-resources-node
+            mountPath: "/var/lib/grafana/dashboards/k8s-resources-node.json"
+          - name: k8s-resources-pod
+            mountPath: "/var/lib/grafana/dashboards/k8s-resources-pod.json"
+          - name: k8s-resources-workload
+            mountPath: "/var/lib/grafana/dashboards/k8s-resources-workload.json"
+          - name: k8s-resources-workloads-namespace
+            mountPath: "/var/lib/grafana/dashboards/k8s-resources-workloads-namespace.json"                     
+          - name: kubelet
+            mountPath: "/var/lib/grafana/dashboards/kubelet.json"
+          - name: namespace-by-pod
+            mountPath: "/var/lib/grafana/dashboards/namespace-by-pod.json"
+          - name: namespace-by-workload
+            mountPath: "/var/lib/grafana/dashboards/namespace-by-workload.json"
+          - name: persistentvolumesusage
+            mountPath: "/var/lib/grafana/dashboards/persistentvolumesusage.json"
+          - name: pod-total
+            mountPath: "/var/lib/grafana/dashboards/pod-total.json"
+          - name: proxy
+            mountPath: "/var/lib/grafana/dashboards/proxy.json"
+          - name: scheduler
+            mountPath: "/var/lib/grafana/dashboards/scheduler.json"
+          - name: statefulset
+            mountPath: "/var/lib/grafana/dashboards/statefulset.json"
+          - name: workload-total
+            mountPath: "/var/lib/grafana/dashboards/workload-total.json"             
+  
       volumes:
         - name: grafana-storage-volume
           persistentVolumeClaim:
@@ -38,3 +90,64 @@ spec:
           configMap:
             defaultMode: 420
             name: grafana-datasources
+        - name: grafana-config
+          configMap:
+            name: grafana-config
+        - name: grafana-dashboardproviders
+          configMap:
+            name: grafana-dashboardproviders
+        - name: apiserver
+          configMap:
+            name: apiserver
+        - name: cluster-total
+          configMap:
+            name: cluster-total
+        - name: controller-manager
+          configMap:
+            name: controller-manager            
+        - name: k8s-resources-cluster
+          configMap:
+            name: k8s-resources-cluster
+        - name: k8s-resources-namespace
+          configMap:
+            name: k8s-resources-namespace
+        - name: k8s-resources-node
+          configMap:
+            name: k8s-resources-node
+        - name: k8s-resources-pod
+          configMap:
+            name: k8s-resources-pod
+        - name: k8s-resources-workload
+          configMap:
+            name: k8s-resources-workload
+        - name: k8s-resources-workloads-namespace
+          configMap:
+            name: k8s-resources-workloads-namespace                        
+        - name: kubelet
+          configMap:
+            name: kubelet  
+        - name: namespace-by-pod
+          configMap:
+            name: namespace-by-pod 
+        - name: namespace-by-workload
+          configMap:
+            name: namespace-by-workload 
+        - name: persistentvolumesusage
+          configMap:
+            name: persistentvolumesusage 
+        - name: pod-total
+          configMap:
+            name: pod-total
+        - name: proxy
+          configMap:
+            name: proxy  
+        - name: scheduler
+          configMap:
+            name: scheduler 
+        - name: statefulset
+          configMap:
+            name: statefulset  
+        - name: workload-total
+          configMap:
+            name: workload-total                   
+    

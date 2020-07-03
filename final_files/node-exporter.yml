@@ -39,13 +39,13 @@ spec:
               mountPath: /host/sys
               readOnly: true
           # Resource limits and requests of `10m` of CPU and `50Mi` of memory
-          resources:
-            limits:
-              cpu: 10m
-              memory: 50Mi
-            requests:
-              cpu: 10m
-              memory: 50Mi
+          #          resources:
+          #  limits:
+          #    cpu: 10m
+          #    memory: 50Mi
+          #  requests:
+          #    cpu: 10m
+          #    memory: 50Mi
       # The `hostNetwork` and `hostPID` Pod Security parameters are set to `true` to allow `node-exporter` 
       # to  access the host process ID namespace and Node network namespace, which are required for scraping Node metrics
       hostNetwork: true

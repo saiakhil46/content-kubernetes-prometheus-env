@@ -16,7 +16,7 @@ spec:
         fsGroup: 2000
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.2.1
+          image: quay.io/prometheus/prometheus:v2.11.1
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
@@ -28,6 +28,8 @@ spec:
               mountPath: /etc/prometheus/
             - name: prometheus-rules-volume
               mountPath: /var/prometheus/rules
+            - name: rules-alerts
+              mountPath: /opt/prometheus/rules_1  
             - name: prometheus-storage-volume
               mountPath: /prometheus/
         - name: watch
@@ -47,6 +49,9 @@ spec:
         - name: prometheus-rules-volume
           configMap:
             name: prometheus-rules-conf
+        - name: rules-alerts
+          configMap:
+            name: rules-alerts
         - name: prometheus-storage-volume
           persistentVolumeClaim:
             claimName: prometheus-storage-volume
